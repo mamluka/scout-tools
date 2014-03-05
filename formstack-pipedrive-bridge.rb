@@ -52,7 +52,7 @@ post '/bridge' do
                     key: 'manage-listing',
                     name: 'Listing Construction'
                 }, {
-                    key: 'manage-listing',
+                    key: 'build-listing',
                     name: 'Collect Business Info'
                 }, {
                     key: 'google-pin',
@@ -69,13 +69,27 @@ post '/bridge' do
                 }, {
                     key: 'pay-commission',
                     name: 'Pay Commission'
+                }, {
+                    key: 'yahoo-pin-send',
+                    name: 'Yahoo PIN Send'
+                }, {
+                    key: 'bing-pin-send',
+                    name: 'Bing PIN Send'
+                }, {
+                    key: 'yahoo-pin',
+                    name: 'Yahoo PIN Activation'
+                }, {
+                    key: 'bing-pin',
+                    name: 'Bing PIN Activation'
                 }]
 
 
-  activities.each { |x|
+  %w{manage-listing build-listing google-pin upsell-call enrollment-interview google-pin-send}.each { |x|
+
+    activity = activities.select {|p| p[:key] == x}.first
     Pipedrive::Activity.good_create({
-                                        type: x[:key],
-                                        subject: x[:name]+ ' - ' + params['Business Name'],
+                                        type: activity[:key],
+                                        subject: activity[:name]+ ' - ' + params['Business Name'],
                                         org_id: org_id,
                                         user_id: 176396,
                                         person_id: person.id,
@@ -99,10 +113,27 @@ post '/bridge' do
                                       type: 'pay-commission',
                                       subject: 'Pay Commission - ' + params['Business Name'],
                                       org_id: org_id,
-                                      user_id: 181200,
+                                      user_id: 175971,
                                       person_id: person.id,
                                       deal_id: deal_2.id
                                   })
+
+  if params['Product'] == 'GYB'
+
+    %w{yahoo-pin-send bing-pin-send yahoo-pin bing-pin}.each { |x|
+
+      activity = activities.select {|p| p[:key] == x}.first
+
+      Pipedrive::Activity.good_create({
+                                          type: activity[:key],
+                                          subject: activity[:name]+ ' - ' + params['Business Name'],
+                                          org_id: org_id,
+                                          user_id: 181200,
+                                          person_id: person.id,
+                                          deal_id: deal_1.id
+                                      })
+    }
+  end
 
   'OK'
 
