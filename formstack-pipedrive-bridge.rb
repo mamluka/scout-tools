@@ -1,8 +1,9 @@
 require 'sinatra'
 require 'google_drive'
+require 'pipedrive-ruby'
 
 require_relative 'settings'
-require_relative 'formstack-pipedrive-bridge'
+require_relative 'pipedrive-api-extra'
 
 set :port, 3000
 set :bind, '0.0.0.0'
@@ -41,10 +42,10 @@ post '/bridge' do
       person_id: person.id,
       user_id: owner_id,
       value: params['Price'].to_i,
-      #stage: 6,
+      stage_id: 6,
   }
 
-  deal = Pipedrive::Deal.create deal_hash
+  deal_1 = Pipedrive::Deal.create deal_hash
 
 
   activities = [{
@@ -65,17 +66,44 @@ post '/bridge' do
                 }, {
                     key: 'google-pin-send',
                     name: 'Google PIN Send'
+                }, {
+                    key: 'pay-commission',
+                    name: 'Pay Commission'
                 }]
 
 
   activities.each { |x|
     Pipedrive::Activity.good_create({
                                         type: x[:key],
-                                        subject: x[:name]+ '-' + params['Business Name'],
+                                        subject: x[:name]+ ' - ' + params['Business Name'],
                                         org_id: org_id,
-                                        user_id: owner_id,
+                                        user_id: 176396,
                                         person_id: person.id,
-                                        deal_id: deal.id
+                                        deal_id: deal_1.id
                                     })
   }
+
+  deal_hash = {
+      title: params['Business Name'] + ' ' + params['Product'],
+      org_id: org_id,
+      person_id: person.id,
+      user_id: owner_id,
+      value: params['Price'].to_i,
+      stage_id: 6,
+      status: 'won'
+  }
+
+  deal_2 = Pipedrive::Deal.create deal_hash
+
+  Pipedrive::Activity.good_create({
+                                      type: 'pay-commission',
+                                      subject: 'Pay Commission - ' + params['Business Name'],
+                                      org_id: org_id,
+                                      user_id: 181200,
+                                      person_id: person.id,
+                                      deal_id: deal_2.id
+                                  })
+
+  'OK'
+
 end
