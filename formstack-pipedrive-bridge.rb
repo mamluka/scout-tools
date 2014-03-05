@@ -89,7 +89,7 @@ post '/bridge' do
       person_id: person.id,
       user_id: owner_id,
       value: params['Price'].to_i,
-      stage_id: 6,
+      stage_id: 38,
       status: 'won'
   }
 
