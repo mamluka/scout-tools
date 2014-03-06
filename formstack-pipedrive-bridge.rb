@@ -40,9 +40,11 @@ post '/bridge' do
       title: params['Business Name'] + ' ' + params['Product'],
       org_id: org_id,
       person_id: person.id,
-      user_id: owner_id,
-      value: params['Price'].to_i,
-      stage_id: 6,
+      user_id: 175983, #cody
+      value: 0,
+      :'081669c9b2a9f8b3d3f8a9ec5a6a4d187ef0c635' => params['Listing URL'],
+      :'03dfc0cf0d5dd31c54558f7f3435c3f3eeae3067' => params['Notes/Comments'],
+      stage_id: 38,
   }
 
   deal_1 = Pipedrive::Deal.create deal_hash
@@ -86,7 +88,7 @@ post '/bridge' do
 
   %w{manage-listing build-listing google-pin upsell-call enrollment-interview google-pin-send}.each { |x|
 
-    activity = activities.select {|p| p[:key] == x}.first
+    activity = activities.select { |p| p[:key] == x }.first
     Pipedrive::Activity.good_create({
                                         type: activity[:key],
                                         subject: activity[:name]+ ' - ' + params['Business Name'],
@@ -97,14 +99,34 @@ post '/bridge' do
                                     })
   }
 
+  if params['Product'] == 'GYB'
+
+    %w{yahoo-pin-send bing-pin-send yahoo-pin bing-pin}.each { |x|
+
+      activity = activities.select { |p| p[:key] == x }.first
+
+      Pipedrive::Activity.good_create({
+                                          type: activity[:key],
+                                          subject: activity[:name]+ ' - ' + params['Business Name'],
+                                          org_id: org_id,
+                                          user_id: 176396,
+                                          person_id: person.id,
+                                          deal_id: deal_1.id
+                                      })
+    }
+  end
+
   deal_hash = {
       title: params['Business Name'] + ' ' + params['Product'],
       org_id: org_id,
       person_id: person.id,
       user_id: owner_id,
       value: params['Price'].to_i,
-      stage_id: 38,
-      status: 'won'
+      stage_id: 6,
+      status: 'won',
+      :'081669c9b2a9f8b3d3f8a9ec5a6a4d187ef0c635' => params['Listing URL'],
+      :'03dfc0cf0d5dd31c54558f7f3435c3f3eeae3067' => params['Notes/Comments'],
+      :'3d1b58cafdc6a8b9e9d12ba89cd15dc68aa5cfa8' => params['']
   }
 
   deal_2 = Pipedrive::Deal.create deal_hash
@@ -118,22 +140,7 @@ post '/bridge' do
                                       deal_id: deal_2.id
                                   })
 
-  if params['Product'] == 'GYB'
 
-    %w{yahoo-pin-send bing-pin-send yahoo-pin bing-pin}.each { |x|
-
-      activity = activities.select {|p| p[:key] == x}.first
-
-      Pipedrive::Activity.good_create({
-                                          type: activity[:key],
-                                          subject: activity[:name]+ ' - ' + params['Business Name'],
-                                          org_id: org_id,
-                                          user_id: 181200,
-                                          person_id: person.id,
-                                          deal_id: deal_1.id
-                                      })
-    }
-  end
 
   'OK'
 
