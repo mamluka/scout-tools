@@ -6,7 +6,7 @@ require_relative 'settings'
 require_relative 'pipedrive-api-extra'
 
 class MissionCritical < Sinatra::Base
-  post '/mission-critical' do
+  post '/' do
 
     $logger.info params
 

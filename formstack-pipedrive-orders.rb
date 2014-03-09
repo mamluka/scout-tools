@@ -6,7 +6,7 @@ require_relative 'settings'
 require_relative 'pipedrive-api-extra'
 
 class Orders < Sinatra::Base
-  post '/orders' do
+  post '/' do
 
     $logger.info params
 

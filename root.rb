@@ -7,6 +7,6 @@ require_relative 'formstack-pipedrive-plans'
 
 $logger = Logger.new('log.log')
 
-mount MissionCritical
-mount Orders
-mount Plans
+run MissionCritical
+#run Orders
+#run Plans
