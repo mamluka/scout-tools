@@ -13,8 +13,8 @@ class MissionCritical < Sinatra::Base
     Pipedrive.authenticate(Settings.pipedrive.api_key)
 
     user = Pipedrive::User.all.select { |x| x.name.downcase == params['Agent'].downcase }.first
-
     owner_id = user.id
+
     org_hash = {
         name: params['Business Name'],
         address: params['Address'],
