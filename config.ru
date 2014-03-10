@@ -1,6 +1,7 @@
 require './formstack-pipedrive-mc'
 require './formstack-pipedrive-plans'
 require './formstack-pipedrive-orders'
+require './ytel-bridge'
 
 require 'logger'
 $logger = Logger.new('log.log')
@@ -15,4 +16,8 @@ end
 
 map '/plans' do
   run Plans
+  end
+
+map '/ytel' do
+  run YTel
 end
