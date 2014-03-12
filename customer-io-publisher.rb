@@ -13,6 +13,8 @@ class CustomerIoPublisher < Sinatra::Base
     event_name = params['event']
     current = params['current']
 
+    $logger.info params.to_json
+
     if event_name == 'added.organization'
 
       $logger.info 'added.organization'
