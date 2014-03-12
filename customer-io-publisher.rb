@@ -16,7 +16,7 @@ class CustomerIoPublisher < Sinatra::Base
     event_name = params['event']
     current = params['current']
 
-    $logger.info 'Publising event'
+    $logger.info "Publishing event #{event_name}"
 
     $logger.info params.to_json
 
