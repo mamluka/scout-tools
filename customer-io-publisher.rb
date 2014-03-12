@@ -6,7 +6,7 @@ require 'logger'
 require_relative 'settings'
 
 $customerio = Customerio::Client.new(Settings.customerio.site_id, Settings.customerio.api_key)
-$logger = Logger.new('log.log')
+$logger = Logger.new('publisher-logger.log')
 
 class CustomerIoPublisher < Sinatra::Base
   post '/' do
