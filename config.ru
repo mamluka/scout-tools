@@ -2,6 +2,7 @@ require './formstack-pipedrive-mc'
 require './formstack-pipedrive-plans'
 require './formstack-pipedrive-orders'
 require './ytel-bridge'
+require './customer-io-publisher'
 
 require 'logger'
 $logger = Logger.new('log.log')
