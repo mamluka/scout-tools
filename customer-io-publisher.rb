@@ -40,12 +40,18 @@ class CustomerIoPublisher < Sinatra::Base
     end
 
     if event_name == 'added.deal'
+
+      $logger.info 'added.deal'
+
       $customerio.track(current['person_id'], 'Deal created', created_at: Time.parse(current['add_time']).to_i)
     end
 
     if event_name == 'updated.deal'
 
       if current['stage_id'] != previous['stage_id']
+
+        $logger.info 'Stage update'
+
         $customerio.track(current['person_id'], "Deal moved to stage #{current['stage']}", created_at: Time.parse(current['add_time']).to_i)
       end
 
