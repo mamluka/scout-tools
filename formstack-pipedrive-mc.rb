@@ -30,6 +30,7 @@ class MissionCritical < Sinatra::Base
         name: params['First Name'] + ' ' + params['Last Name'],
         org_id: org_id,
         phone: params['Phone'],
+        email: params['Email'],
         owner_id: owner_id
 
     }
