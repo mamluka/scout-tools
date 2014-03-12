@@ -4,6 +4,7 @@ require 'time'
 require 'logger'
 
 require_relative 'settings'
+require_relative 'json-params'
 
 $customerio = Customerio::Client.new(Settings.customerio.site_id, Settings.customerio.api_key)
 
