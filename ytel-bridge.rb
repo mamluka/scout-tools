@@ -24,11 +24,11 @@ class YTel < Sinatra::Base
     ws[new_row_num, 5] = params['last']
 
     ws[new_row_num, 6] = "#{params['address']} #{params['address2']}"
-    ws[new_row_num, 8] = params['city']
-    ws[new_row_num, 9] = params['state']
-    ws[new_row_num, 11] = params['phone']
-    ws[new_row_num, 12] = params['email']
-    ws[new_row_num, 13] = params['notes']
+    ws[new_row_num, 7] = params['city']
+    ws[new_row_num, 8] = params['state']
+    ws[new_row_num, 9] = params['phone']
+    ws[new_row_num, 10] = params['email']
+    ws[new_row_num, 11] = params['notes']
 
     ws.save
 
