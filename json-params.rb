@@ -12,7 +12,7 @@ module Sinatra
       app.helpers do
         def json_body_params
           @json_body_params ||= begin
-            MultiJson.load(request.body.read.to_s, symbolize_keys: true)
+            MultiJson.load(request.body.read.to_s)
           rescue MultiJson::LoadError
             {}
           end
