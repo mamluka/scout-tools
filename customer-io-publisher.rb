@@ -52,7 +52,7 @@ class CustomerIoPublisher < Sinatra::Base
 
         $logger.info 'Stage update'
 
-        $customerio.track(current['person_id'], "Deal moved to stage #{current['stage']}", created_at: Time.parse(current['add_time']).to_i)
+        $customerio.track(current['person_id'], "Deal moved to stage #{current['stage_id']}", created_at: Time.parse(current['update_time']).to_i)
       end
 
     end
