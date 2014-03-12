@@ -6,9 +6,11 @@ require 'logger'
 require_relative 'settings'
 
 $customerio = Customerio::Client.new(Settings.customerio.site_id, Settings.customerio.api_key)
-$logger = Logger.new('publisher-logger.log')
 
 class CustomerIoPublisher < Sinatra::Base
+
+  register Sinatra::JsonBodyParams
+
   post '/' do
     event_name = params['event']
     current = params['current']
