@@ -16,8 +16,12 @@ end
 
 map '/plans' do
   run Plans
-  end
+end
 
 map '/ytel' do
   run YTel
+end
+
+map '/publisher' do
+  run CustomerIoPublisher
 end
