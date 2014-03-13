@@ -89,7 +89,7 @@ class CustomerIoPublisher < Sinatra::Base
           website: [:'69bdbbe9f2e88f17ca4caf0532d61833aa086956'],
           business_description: org[:'8d71387e1817b07ad4092cde9ae69c92c97c1782'],
           keywords: org[:f09b1af3dde76c4c8c3acd76cc9bfb0366a3a116],
-          marketing_tags: $marketing_tags.select { |x| marketing_tag_ids.include?(x[:id]) }.map { |x| x[:label] },
+          marketing_tags: $marketing_tags.select { |x| marketing_tag_ids.include?(x[:id].to_i) }.map { |x| x[:label] },
           listing_url: org['5aca120ee2df77e91dbbb435e9784322da79cb8e'],
           created_at: Time.parse(current['add_time']).utc.to_i,
       }
