@@ -30,7 +30,7 @@ class CustomerIoPublisher < Sinatra::Base
           owner_id: current['owner_id'],
           name: current['name'],
           email: (current['email'].first['value'] rescue nil),
-          created_at: Time.parse(current['add_time']).to_i,
+          created_at: Time.parse(current['add_time']).utc.to_i,
       }
 
       $logger.info hash.to_json
@@ -43,7 +43,7 @@ class CustomerIoPublisher < Sinatra::Base
 
       $logger.info 'added.deal'
 
-      $customerio.track(current['person_id'], 'Deal created', created_at: Time.parse(current['add_time']).to_i)
+      $customerio.track(current['person_id'], 'Deal created', created_at: Time.parse(current['add_time']).utc.to_i, value: current['weighted_value'])
     end
 
     if event_name == 'updated.deal'
@@ -52,63 +52,25 @@ class CustomerIoPublisher < Sinatra::Base
 
         $logger.info 'Stage update'
 
-        $customerio.track(current['person_id'], "Deal moved to stage #{current['stage_id']}", created_at: Time.parse(current['update_time']).to_i)
+        $customerio.track(current['person_id'], "Deal moved to stage #{current['stage_id']}", updated_at: Time.parse(current['update_time']).utc.to_i, value: current['weighted_value'])
+      end
+
+      if current['status'] != previous['status'] && current['status'] == 'won'
+        $logger.info 'Deal won'
+
+        $customerio.track(current['person_id'], 'Deal won', updated_at: Time.parse(current['update_time']).utc.to_i)
       end
 
     end
-    #if event_name == 'added.deal'
-    #
-    #  $logger.info 'added.deal'
-    #
-    #  $customerio.track(current['org_id'], 'Deal Added', {
-    #      created_at: Time.parse(current['add_time']).to_i,
-    #      stage: current['stage_id'],
-    #      status: current['status'],
-    #      org: current['org_name'],
-    #      person: current['person_name'],
-    #      value: current['weighted_value']
-    #  })
-    #end
-    #
-    #if event_name == 'updated.deal'
-    #
-    #  $logger.info 'updated.deal'
-    #
-    #  $customerio.track(current['org_id'], 'Deal updated', {
-    #      created_at: Time.parse(current['add_time']).to_i,
-    #      stage: current['stage_id'],
-    #      status: current['status'],
-    #      org: current['org_name'],
-    #      person: current['person_name'],
-    #      value: current['weighted_value'],
-    #      won_time: (Time.parse(current['won_time']).to_i rescue nil),
-    #  })
-    #end
-    #
-    #if event_name == 'added.activity'
-    #
-    #  $logger.info 'added.activity'
-    #
-    #  $customerio.track(current['org_id'], 'Deal Added', {
-    #      created_at: Time.parse(current['add_time']).to_i,
-    #      type: current['type'],
-    #      org: current['org_name'],
-    #      person: current['person_name'],
-    #      is_done: current['done']
-    #  })
-    #end
-    #
-    #if event_name == 'updated.activity'
-    #
-    #  $logger.info 'updated.activity'
-    #
-    #  $customerio.track(current['org_id'], 'Deal Added', {
-    #      type: current['type'],
-    #      org: current['org_name'],
-    #      person: current['person_name'],
-    #      is_done: current['done']
-    #  })
-    #end
+
+    if event_name == 'updated.activity'
+
+      $logger.info 'Activity donw'
+
+      if current['done'] != previous['done']
+        $customerio.track(current['person_id'], "Activity #{current['type']} done", done_at: Time.parse(current['marked_as_done_time']).utc.to_i)
+      end
+    end
 
     'OK'
   end

@@ -41,9 +41,19 @@ class Orders < Sinatra::Base
         person_id: person.id,
         user_id: 175983, #cody
         value: params['Order Total'].to_i,
-        stage_id: 5,
         status: 'won'
     }
+
+    case params['Product']
+      when '999'
+        deal_hash[:stage_id] = 5
+      when '499'
+        deal_hash[:stage_id] = 44
+      when '799'
+        deal_hash[:stage_id] = 11
+      else
+        deal_hash[:stage_id] = 5
+    end
 
     deal_1 = Pipedrive::Deal.create deal_hash
 
@@ -125,7 +135,7 @@ class Orders < Sinatra::Base
 
 
     deal_hash = {
-        title: params['Business Name'] + ' ' + params['Product'],
+        title: params['Business Name'] + ' ' + params['Product'] + ' Fulfillment' ,
         org_id: org_id,
         person_id: person.id,
         user_id: 175983, #cody,

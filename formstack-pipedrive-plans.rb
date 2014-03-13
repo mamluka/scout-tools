@@ -42,11 +42,21 @@ class Plans < Sinatra::Base
         title: params['Business Name'] + ' ' + params['Product'],
         org_id: org_id,
         person_id: person.id,
-        user_id: 175983, #cody
+        user_id: 175756, #jon
         value: params['Order Total'].to_i,
-        stage_id: 5,
         status: 'won'
     }
+
+    case params['Product']
+      when '999'
+        deal_hash[:stage_id] = 5
+      when '499'
+        deal_hash[:stage_id] = 44
+      when '799'
+        deal_hash[:stage_id] = 11
+      else
+        deal_hash[:stage_id] = 5
+    end
 
     deal_1 = Pipedrive::Deal.create deal_hash
 
@@ -96,11 +106,13 @@ class Plans < Sinatra::Base
                   }]
 
 
+
+
     Pipedrive::Activity.good_create({
                                         type: 'pay-commission',
                                         subject: 'Pay commission - ' + params['Business Name'],
                                         org_id: org_id,
-                                        user_id: owner_id,
+                                        user_id: params['Product'] == '999' ?  175756 : owner_id,
                                         person_id: person.id,
                                         deal_id: deal_1.id
                                     })
@@ -109,14 +121,14 @@ class Plans < Sinatra::Base
                                         type: 'setup-arb',
                                         subject: 'Setup ARB - ' + params['Business Name'],
                                         org_id: org_id,
-                                        user_id: 175971,
+                                        user_id: 175971, #chad
                                         person_id: person.id,
                                         deal_id: deal_1.id
                                     })
 
 
     deal_hash = {
-        title: params['Business Name'] + ' ' + params['Product'],
+        title: params['Business Name'] + ' ' + params['Product'] + ' Fulfillment',
         org_id: org_id,
         person_id: person.id,
         user_id: 175983, #cody,
