@@ -43,7 +43,7 @@ class CustomerIoPublisher < Sinatra::Base
 
       $logger.info 'added.deal'
 
-      $customerio.track(current['person_id'], 'Deal created', created_at: Time.parse(current['add_time']).utc.to_i, value: current['weighted_value'])
+      $customerio.track(current['person_id'], "Deal created at stage #{current['stage_id']}", created_at: Time.parse(current['add_time']).utc.to_i, value: current['weighted_value'])
     end
 
     if event_name == 'updated.deal'
@@ -58,7 +58,7 @@ class CustomerIoPublisher < Sinatra::Base
       if current['status'] != previous['status'] && current['status'] == 'won'
         $logger.info 'Deal won'
 
-        $customerio.track(current['person_id'], 'Deal won', updated_at: Time.parse(current['update_time']).utc.to_i)
+        $customerio.track(current['person_id'], "Deal won at stage #{current['stage_id']}", updated_at: Time.parse(current['update_time']).utc.to_i)
       end
 
     end
