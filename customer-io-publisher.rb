@@ -79,6 +79,7 @@ class CustomerIoPublisher < Sinatra::Base
           id: current['id'],
           owner_id: current['owner_id'],
           name: current['name'],
+          org_name: org['name'],
           email: (current['email'].first['value'] rescue nil),
           phone: (current['phone'].first['value'] rescue nil),
           address: org.address,
