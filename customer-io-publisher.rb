@@ -64,6 +64,9 @@ class CustomerIoPublisher < Sinatra::Base
 
     if event_name == 'added.person'
 
+
+
+
       $logger.info 'added.person'
 
       next if not current['org_id']

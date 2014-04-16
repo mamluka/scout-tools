@@ -35,5 +35,12 @@ class YTel < Sinatra::Base
 
     'OK'
   end
+
+  get '/moz' do
+    name = params['organization']
+    zip = params['zip']
+
+    redirect to("https://moz.com/local/search/#{name}/#{zip}")
+  end
 end
 
