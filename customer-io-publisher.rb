@@ -97,8 +97,8 @@ class CustomerIoPublisher < Sinatra::Base
           listing_url: org['5aca120ee2df77e91dbbb435e9784322da79cb8e'],
           created_at: Time.parse(current['add_time']).utc.to_i,
       }
-
-      $logger.info hash.to_json
+      $logger.info 'Identify hash'
+      $logger.info hash
 
       $customerio.identify(hash)
 
