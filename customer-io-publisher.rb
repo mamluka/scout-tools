@@ -62,12 +62,9 @@ class CustomerIoPublisher < Sinatra::Base
 
     $logger.info params.to_json
 
-    if event_name == 'added.person'
+    if event_name == 'added.person' || event_name == 'updated.person'
 
-
-
-
-      $logger.info 'added.person'
+      $logger.info event_name
 
       next if not current['org_id']
 
@@ -108,13 +105,12 @@ class CustomerIoPublisher < Sinatra::Base
 
       $logger.info 'added.deal'
 
-      org_hash =
+      $customerio.track(current['person_id'], "Deal created at stage #{current['stage_id']}",
+                        created_at: Time.parse(current['add_time']).utc.to_i,
+                        value: current['weighted_value'],
 
-          $customerio.track(current['person_id'], "Deal created at stage #{current['stage_id']}",
-                            created_at: Time.parse(current['add_time']).utc.to_i,
-                            value: current['weighted_value'],
-
-          )
+      )
+      
     end
 
     if event_name == 'updated.deal'
