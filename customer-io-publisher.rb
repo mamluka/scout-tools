@@ -73,7 +73,7 @@ class CustomerIoPublisher < Sinatra::Base
       $logger.info 'Org info'
       $logger.info org
 
-      marketing_tag_ids = org[:'8518f3400b50d0480301baf80ba187197e6ef811'].split(',').map(&:to_i)
+      marketing_tag_ids = org[:'8518f3400b50d0480301baf80ba187197e6ef811'].split(',').map(&:to_i) if org[:'8518f3400b50d0480301baf80ba187197e6ef811']
 
       hash = {
           id: current['id'],
@@ -90,10 +90,12 @@ class CustomerIoPublisher < Sinatra::Base
           website: org[:'69bdbbe9f2e88f17ca4caf0532d61833aa086956'],
           business_description: org[:'8d71387e1817b07ad4092cde9ae69c92c97c1782'],
           keywords: org[:f09b1af3dde76c4c8c3acd76cc9bfb0366a3a116],
-          marketing_tags: $marketing_tags.select { |x| marketing_tag_ids.include?(x[:id]) }.map { |x| x[:label] },
           listing_url: org['5aca120ee2df77e91dbbb435e9784322da79cb8e'],
           created_at: Time.parse(current['add_time']).utc.to_i,
       }
+
+      hash[:marketing_tags] = $marketing_tags.select { |x| marketing_tag_ids.include?(x[:id]) }.map { |x| x[:label] } if org[:'8518f3400b50d0480301baf80ba187197e6ef811']
+
       $logger.info 'Identify hash'
       $logger.info hash
 
@@ -110,7 +112,7 @@ class CustomerIoPublisher < Sinatra::Base
                         value: current['weighted_value'],
 
       )
-      
+
     end
 
     if event_name == 'updated.deal'
